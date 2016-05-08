@@ -92,3 +92,29 @@ exports.BadgeCollector = function(e) {
     
     return r;
 };
+
+exports._GameCollector = function(e) {
+    
+};
+
+exports._FavoriteGame = function(e) {
+    
+};
+
+exports.ItemShowcase = function(e) { 
+    var $e = $(e).find('.showcase_slot_row');
+    
+    var r = {items: []};
+    
+    var items = $e.children('div');
+    items.each(function(i, item) {
+        // Not sure how to get the card info 'properly', including game name
+        r.items.push({
+            src: $(item).find('a img').attr('src')
+        })
+    });
+    
+    r.count = parseInt($e.find('a .value').text());
+    
+    return r;
+};
