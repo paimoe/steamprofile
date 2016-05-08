@@ -2,7 +2,7 @@ var $ = require('cheerio')
     _ = require('underscore');
 
 exports.ScreenshotShowcase = function($parent) {
-    console.log('Screenshow Showcase, fetch screenshots on main page');
+    //console.log('Screenshow Showcase, fetch screenshots on main page');
     
     var r = {
         main: null,
@@ -28,7 +28,7 @@ exports.ScreenshotShowcase = function($parent) {
 };
 
 exports.AchievementShowcase = function($parent) {
-    console.log('Achievement Showcase');
+    //console.log('Achievement Showcase');
     
     var r = {
         imgs: [],

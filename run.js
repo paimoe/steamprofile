@@ -1,17 +1,9 @@
 var request = require('request-promise'),
     cheerio = require('cheerio'),
+    defer = require('deferred'),
     steam_sc = require('./showcases.js');
-    
-console.log('SteamProfile\n###################');
 
-// URL to steam profile
-var profile_url = process.argv[2];
-if (profile_url === undefined) {
-    console.error('ERROR: No profile_url passed');
-    process.exit();
-}
-
-var DATA = {'url': profile_url};
+var DATA = {};
 
 // Selectors
 var CSS = {
@@ -21,7 +13,8 @@ var CSS = {
 }
 
 // Download page
-function page_main() {
+function page_main(profile_url) {
+    var def = defer();
     request(profile_url).then(function (body) {
         var $ = cheerio.load(body);
         
@@ -37,14 +30,32 @@ function page_main() {
             if (name in steam_sc) {
                 DATA[name] = steam_sc[name]($(e).parent());
             } else {
-                console.log('No showcase parser for "' + name + '"');
+                //console.log('No showcase parser for "' + name + '"');
             }
         });
         
-        console.log(DATA);
-    })
+        def.resolve(DATA);
+    });
+    return def.promise;
 }
 
-page_main();
+exports.get = page_main;
 
-// Output
+if (require.main === module) {
+    
+    // URL to steam profile
+    var profile_url = process.argv[2];
+    if (profile_url === undefined) {
+        console.error('ERROR: No profile_url passed');
+        process.exit();
+    }
+    
+    // Check if we wanna output
+    if (process.argv[3] !== undefined) {
+        var output_dest = process.argv[3];
+    }
+    
+    page_main(profile_url).then(function(result) {
+        console.log(result);
+    })
+}
