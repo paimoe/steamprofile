@@ -26,8 +26,8 @@ function page_main() {
         var $ = cheerio.load(body);
         
         // Select
-        DATA['username'] = $(CSS.name).text();
-        DATA['level'] = $(CSS.level).text();
+        DATA['username'] = $(CSS.name).text().trim();
+        DATA['level'] = parseInt($(CSS.level).text());
         
         // Showcases
         var showcases = $(CSS.showcases);
@@ -35,7 +35,7 @@ function page_main() {
             var name = $(e).text().replace(' ', '').trim();
             // If we have a supported showcase
             if (name in steam_sc) {
-                DATA['screenshots'] = steam_sc[name]($(e).parent());
+                DATA[name] = steam_sc[name]($(e).parent());
             } else {
                 console.log('No showcase parser for "' + name + '"');
             }
