@@ -9,7 +9,7 @@ var DATA = {};
 var CSS = {
     name: '.actual_persona_name',
     level: '.persona_level span',
-    showcases: '.profile_customization_header',
+    showcases: '.profile_customization',
 }
 
 // Download page
@@ -25,10 +25,10 @@ function page_main(profile_url) {
         // Showcases
         var showcases = $(CSS.showcases);
         showcases.each(function(i, e) {
-            var name = $(e).text().replace(' ', '').trim();
+            var name = $(e).find('.profile_customization_header').text().replace(' ', '').trim();
             // If we have a supported showcase
             if (name in steam_sc) {
-                DATA[name] = steam_sc[name]($(e).parent());
+                DATA[name] = steam_sc[name](e);
             } else {
                 //console.log('No showcase parser for "' + name + '"');
             }

@@ -1,8 +1,10 @@
 var $ = require('cheerio')
     _ = require('underscore');
 
-exports.ScreenshotShowcase = function($parent) {
+exports.ScreenshotShowcase = function(e) {
     //console.log('Screenshow Showcase, fetch screenshots on main page');
+    
+    var $parent = $(e).parent();
     
     var r = {
         main: null,
@@ -27,8 +29,10 @@ exports.ScreenshotShowcase = function($parent) {
     return r;
 };
 
-exports.AchievementShowcase = function($parent) {
+exports.AchievementShowcase = function(e) {
     //console.log('Achievement Showcase');
+    
+    var $parent = $(e).parent();
     
     var r = {
         imgs: [],
@@ -62,6 +66,29 @@ exports.AchievementShowcase = function($parent) {
     r.num = parseInt(vals[0].data.replace(',', ''));
     r.perfect = parseInt(vals[1].data);
     r.rate = vals[2].data.trim();
+    
+    return r;
+};
+
+exports.BadgeCollector = function(e) {
+    var $e = $(e);
+    
+    var r = {badges: []};
+    
+    var badges = $e.find('.showcase_badge');
+    badges.each(function(i, e) {
+        
+        var tt = $(e).attr('data-community-tooltip').split('<br>');
+        r.badges.push({
+            name: tt[0].trim(),
+            level: tt[1].trim()[6],
+            game: tt[1].trim().substr('Level x '.length),
+            src: $(e).find('img').attr('src')
+        });
+    });
+    
+    // Showcase stat [badge count is under badges]
+    r.cards = $e.find('.badge_showcase .showcase_stats_row a .value').last().text();
     
     return r;
 };
