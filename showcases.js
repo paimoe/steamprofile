@@ -81,7 +81,7 @@ exports.BadgeCollector = function(e) {
         var tt = $(e).attr('data-community-tooltip').split('<br>');
         r.badges.push({
             name: tt[0].trim(),
-            level: tt[1].trim()[6],
+            level: parseInt(tt[1].trim()[6]),
             game: tt[1].trim().substr('Level x '.length),
             src: $(e).find('img').attr('src')
         });
@@ -93,11 +93,19 @@ exports.BadgeCollector = function(e) {
     return r;
 };
 
-exports._GameCollector = function(e) {
+exports.GameCollector = function(e) {
+    var r = {};
+    var stats = $(e).find('a.showcase_stat');
     
+    r.owned = parseInt($(stats[0]).find('.value').text());
+    r.dlc = parseInt($(stats[1]).find('.value').text());
+    r.reviews = parseInt($(stats[2]).find('.value').text());
+    r.wishlisted = parseInt($(stats[3]).find('.value').text());
+    
+    return r;
 };
 
-exports._FavoriteGame = function(e) {
+exports.FavoriteGame = function(e) {
     
 };
 

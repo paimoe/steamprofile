@@ -1,6 +1,7 @@
 var request = require('request-promise'),
     cheerio = require('cheerio'),
     defer = require('deferred'),
+    fs = require('fs'),
     steam_sc = require('./showcases.js');
 
 var DATA = {};
@@ -30,7 +31,7 @@ function page_main(profile_url) {
             if (name in steam_sc) {
                 DATA[name] = steam_sc[name](e);
             } else {
-                //console.log('No showcase parser for "' + name + '"');
+                console.log('No showcase parser for "' + name + '"');
             }
         });
         
@@ -55,7 +56,16 @@ if (require.main === module) {
         var output_dest = process.argv[3];
     }
     
+    // Run
     page_main(profile_url).then(function(result) {
-        console.log(result);
+        
+        if (output_dest !== undefined) {
+            fs.writeFile("./" + output_dest, JSON.stringify(result), function(err) {
+                if(err) {
+                    return console.log(err);
+                }
+            }); 
+        }
+    
     })
 }
